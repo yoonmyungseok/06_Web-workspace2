@@ -103,6 +103,7 @@
         <div class="menu"><a href="">사진게시판</a></div>
     </div>
     <script>
+        //script 태그 내에서도 스크립틀릿과 같은 jsp 요소들을 사용할 수 있다
         var msg="<%=alertMsg%>"; //"성공적으로 로그인이 되었습니다." / "null"
         if(msg!="null"){
             alert(msg);
