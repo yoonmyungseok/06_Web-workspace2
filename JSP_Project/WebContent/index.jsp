@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,6 +32,8 @@
         *사진게시판서비스-  사진게시판리스트조회(R)- 썸네일 /   게시판상세조회(R)   /   게시글작성(C)- 다중첨부파일업로드
                             
     -->
-    <h1>잘 실행되나...?</h1>
+    <%-- <h1>잘 실행되나...?</h1>--%>
+    <!-- 상단에는 menubar.jsp 를 include 시킬것임-->
+    <%@ include file="views/common/menubar.jsp" %>
 </body>
 </html>

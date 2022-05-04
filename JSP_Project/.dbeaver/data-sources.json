@@ -1,0 +1,52 @@
+{
+	"folders": {},
+	"connections": {
+		"oracle_thin-1808a72eeb4-40cab07fa79c4194": {
+			"provider": "oracle",
+			"driver": "oracle_thin",
+			"name": "35.230.16.8",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "35.230.16.8",
+				"port": "1521",
+				"database": "xe",
+				"url": "jdbc:oracle:thin:@//35.230.16.8:1521/xe",
+				"type": "dev",
+				"properties": {
+					"useFetchSizeWithLongColumn": "true",
+					"loginTimeout": "20",
+					"oracle.jdbc.fanEnabled": "false"
+				},
+				"provider-properties": {
+					"@dbeaver-connection-type@": "BASIC",
+					"@dbeaver-session-language@": "KOREAN",
+					"show-only-one-schema@": "false",
+					"@dbeaver-check-schema-content@": "false",
+					"@dbeaver-always-show-dba@": "false",
+					"@dbeaver-always-use-dba-views@": "false",
+					"@dbeaver-meta-use-sys-schema@": "false",
+					"@dbeaver-meta-use-simple-constraints@": "false",
+					"@dbeaver-use-rule-hint@": "false",
+					"@dbeaver-use-meta-optimizer@": "true",
+					"@dbeaver-meta-use-alternative-table-query@": "false",
+					"oracle.meta-search-in-synonyms": "false",
+					"@dbeaver-sid-service@": "SERVICE"
+				},
+				"auth-model": "oracle_native",
+				"handlers": {}
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"auto-close-transactions": false
+		}
+	}
+}
