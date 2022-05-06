@@ -22,7 +22,59 @@ public class MemberService {
 		JDBCTemplate.close(conn);
 
 		//5)Controller로 결과를 반환
-		return m;
+		return m;	
+	}
+	//회원가입 요청 서비스
+	public int insertMember(Member m) {
+		//1)Connection 객체 생성
+		Connection conn=JDBCTemplate.getConnection();
+		
+		//2)만들어진 Connection 객체와 전달받았던 값들을 DAO한테 넘기기
+		int result=new MemberDao().insertMember(conn,m);
+		
+		//3)결과값에 따라 commit 또는 rollback
+		if(result>0) {
+			//성공
+			JDBCTemplate.commit(conn);
+		}else {
+			//실패
+			JDBCTemplate.rollback(conn);
+		}
+		
+		//4)Connection 객체 반납
+		JDBCTemplate.close(conn);
+		
+		//5)Controller로 결과를 반환
+		return result;
+	}
+	
+	//회원 정보 수정용 서비스 
+	public Member updateMember(Member m) {
+		//1)Connection 객체 생성
+		Connection conn=JDBCTemplate.getConnection();
+		
+		//2)만들어진 Connection 객체와 전달받았던 값들을 DAO한테 넘기기
+		int result=new MemberDao().updateMember(conn, m);
+		
+		//3)결과값에 따라 commit 또는 rollback
+		Member updateMem=null;
+		if(result>0) {
+			//성공
+			JDBCTemplate.commit(conn);
+			
+			//갱신된 회원의 정보를 다시 조회해오기(리턴용)
+			updateMem=new MemberDao().selectMember(conn, m.getUserId());
+			
+		}else {
+			//실패
+			JDBCTemplate.rollback(conn);
+		}
+		
+		//4)Connection 객체 반납
+		JDBCTemplate.close(conn);
+		
+		//5)Controller로 결과를 반환
+		return updateMem;
 		
 	}
 }

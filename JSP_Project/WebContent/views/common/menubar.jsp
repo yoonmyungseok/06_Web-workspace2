@@ -4,7 +4,7 @@
 <%
     //로그인한 사용자의 정보 뽑기(session으로부터)
     Member loginUser=(Member)session.getAttribute("loginUser");
-	
+
 	
     //System.out.println(loginUser);
     //로그인전 menubar.jsp를 로딩 시 loginUser에 null이 담김
@@ -25,6 +25,18 @@
 <head>
 <meta charset="UTF-8">
 <title>Welcome D Class</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 <style>
     #login-form, #user-info{
         float: right;
@@ -76,17 +88,18 @@
                 <tr>
                     <th colspan="2">
                         <button type="submit">로그인</button>
-                        <button type="button">회원가입</button>
+                        <button type="button" onclick="enrollPage();">회원가입</button>
                     </th>
                 </tr>
             </table>
         </form>
         <%}else{%>
+
         <!--로그인 성공 후 xxx님 환영합니다 화면-->   
         <div id="user-info">
             <b><%=loginUser.getUserName()%>님</b> 환영합니다 <br><br>
             <div align="center">
-                <a href="">마이페이지</a>
+                <a href="<%=contextPath%>/myPage.me">마이페이지</a>
                 <a href="<%=contextPath%>/logout.me">로그아웃</a>
             </div>
         </div>
@@ -110,8 +123,17 @@
             //알림창을 띄워 준 후 session에 담긴 해당 메시지를
             //session.removeAttribute("키값"); 메소드로 지워줘야 함
             //안그러면 menubar.jsp가 로딩 될 때 마다 매번 alert가 계속 뜸
-            <%session.removeAttribute("alertMsg");%>
+            <% session.removeAttribute("alertMsg"); %>
         }
+        function enrollPage() {
+                //회원가입 페이지로 이동시키는 역할
+                //location.href="/jsp/views/member/memberEnrollForm.jsp";
+                //웹 애플리케이션의 디렉터리 구조가 url에 노출되면 보안에 취약
+
+                //단순한 정적인 페이지 요청이라고 해도 반드시 servlet을 거쳐갈것
+                //=>url에 서블릿 맵핑값만 보이게 해줄것임
+                location.href = "<%=contextPath%>/enrollForm.me"
+            }
     </script>
 </body>
 </html>

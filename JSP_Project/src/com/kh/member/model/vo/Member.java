@@ -20,8 +20,6 @@ public class Member {
 		super();
 	}
 
-	
-	
 	public Member(int userNo, String userId, String userPwd, String userName, String phone, String email,
 			String address, String interest, Date enrollDate, Date modifyDate, String status) {
 		super();
@@ -37,8 +35,29 @@ public class Member {
 		this.modifyDate = modifyDate;
 		this.status = status;
 	}
-
-
+	
+	//회원가입용 생성자 (아이디, 비밀번호, 이름, 전화번호, 이메일, 주소, 취미)
+	public Member(String userId, String userPwd, String userName, String phone, String email, String address, String interest) {
+		super();
+		this.userId = userId;
+		this.userPwd = userPwd;
+		this.userName = userName;
+		this.phone = phone;
+		this.email = email;
+		this.address = address;
+		this.interest = interest;
+	}
+	
+	//회원정보변경용 생성자 (아이디, 이름, 전화번호, 이메일, 주소, 취미)
+	public Member(String userId, String userName, String phone, String email, String address, String interest) {
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.phone = phone;
+		this.email = email;
+		this.address = address;
+		this.interest = interest;
+	}
 
 	//메소드부 
 	

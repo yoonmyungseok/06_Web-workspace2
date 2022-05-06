@@ -44,7 +44,7 @@ public class LoginController extends HttpServlet {
 		//로그인 기능=>POST 방식
 		//1) UTF-8로 인코딩 처리(POST 방식일 경우)
 		request.setCharacterEncoding("UTF-8");
-		
+
 		//2)요청시 전달된 값들을 뽑기(request의 parameter 영역으로부터)
 		//및 변수에 기록하고, VO객체로 가공하기
 		//request.getParameter("키값"): String(밸류값)
@@ -56,6 +56,7 @@ public class LoginController extends HttpServlet {
 
 		//3) 해당 요청을 처리하는 서비스 클래스의 어떤 메소드를 호출
 		Member loginUser=new MemberService().loginMember(userId,userPwd);
+
 		
 		//4)처리된 결과를 가지고 응답화면 지정
 		//System.out.println(loginUser);
@@ -110,7 +111,7 @@ public class LoginController extends HttpServlet {
 			
 			//4_1_3)로그인이 성공했을 경우 보여질 성공 메시지를 session에 담기
 			session.setAttribute("alertMsg", "성공적으로 로그인이 되었습니다");
-			
+
 			/*
 			//포워딩 방식으로 응답할 뷰 출력
 			//4_2)RequestDisptcher 객체 생성
