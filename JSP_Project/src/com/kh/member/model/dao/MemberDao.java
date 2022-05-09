@@ -201,4 +201,64 @@ public class MemberDao {
 		//8)결과 반환
 		return m;
 	}
+	
+	//비밀번호 변경용 DAO 메소드
+	public int updatePwdMember(Connection conn, String userId, String userPwd, String updatePwd) {
+		//UPDATE 문=>int 형 반환(처리된 행의 갯수)
+		//1)필요한 변수들 셋팅
+		int result=0;
+		PreparedStatement pstmt=null;
+		String sql=prop.getProperty("updatePwdMember");
+		
+		try {
+			//2)PreparedStatement 객체 생성
+			pstmt=conn.prepareStatement(sql);
+			
+			//3)미완성된 쿼리문 채우기
+			pstmt.setString(1, updatePwd);
+			pstmt.setString(2, userId);
+			pstmt.setString(3, userPwd);
+			
+			//4,5)쿼리문 실행 및 결과 받기
+			result=pstmt.executeUpdate();
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			//자원반납
+			JDBCTemplate.close(pstmt);
+		}
+		//결과반환
+		return result;
+	}
+	
+	//회원 탈퇴용 DAO 메소드
+	public int deleteMember(Connection conn, String userId, String userPwd) {
+		//UPDATE문=>int형 반환(처리된 행의 갯수)
+		//1)필요한 변수들 셋팅
+		int result=0;
+		PreparedStatement pstmt=null;
+		String sql=prop.getProperty("deleteMember");
+		
+		
+		try {
+			//2)PreparedStatement 객체 생성
+			pstmt=conn.prepareStatement(sql);
+			
+			//3)미완성된 쿼리문 채우기
+			pstmt.setString(1, userId);
+			pstmt.setString(2, userPwd);
+			
+			//4,5)실행 후 결과 받기
+			result=pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			//6)자원 반납
+			JDBCTemplate.close(pstmt);
+		}
+		//7)결과 반환
+		return result;
+	}
 }

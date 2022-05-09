@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<entry key="">
+	<entry key="selectNoticeList">
+		SELECT NOTICE_NO, NOTICE_TITLE, USER_ID, COUNT, CREATE_DATE
+		FROM NOTICE N
+		JOIN MEMBER ON (NOTICE_WRITER=USER_NO)
+		WHERE N.STATUS='Y'
+		ORDER BY CREATE_DATE DESC
 	</entry>
 </properties>

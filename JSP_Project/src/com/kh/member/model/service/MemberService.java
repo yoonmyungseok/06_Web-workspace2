@@ -75,6 +75,53 @@ public class MemberService {
 		
 		//5)Controller로 결과를 반환
 		return updateMem;
+	}
+	
+	//회원 비밀번호 변경용 서비스
+	public Member updatePwdMember(String userId, String userPwd, String updatePwd) {
+		//1)Connection 객체 생성
+		Connection conn=JDBCTemplate.getConnection();
 		
+		//2)만들어진 Connection 객체와 전달값들을 DAO의 메소드한테 넘기고 결과받기
+		int result=new MemberDao().updatePwdMember(conn, userId, userPwd, updatePwd);
+		
+		//3)돌려받은 결과값에 따라서 commit 또는 rollback 처리
+		Member updateMem=null;
+		if(result>0) {
+			//성공
+			JDBCTemplate.commit(conn);
+			//갱신된 회원의 정보를 다시 조회해오기(리턴용)
+			updateMem=new MemberDao().selectMember(conn, userId);
+		}else {
+			//실패
+			JDBCTemplate.rollback(conn);
+		}
+		
+		//4)Connection 객체 반납
+		JDBCTemplate.close(conn);
+				
+		//5)Controller로 결과를 반환
+		return updateMem;
+	}
+	
+	//회원 탈퇴용 서비스
+	public int deleteMember(String userId, String userPwd) {
+		//1)Connection 객체 생성
+		Connection conn=JDBCTemplate.getConnection();
+		
+		//2)만들어진 Connection 객체와 전달값을 DAO의 메소드한테 넘기고 결과받기
+		int result=new MemberDao().deleteMember(conn, userId, userPwd);
+		
+		//3)성공 실패 여부에 따라 commit, rollback 처리
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		//4)자원 반납
+		JDBCTemplate.close(conn);
+		
+		//5)결과 반환
+		return result;
 	}
 }
