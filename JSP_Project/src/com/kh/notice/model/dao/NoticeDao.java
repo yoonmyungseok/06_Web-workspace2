@@ -66,4 +66,122 @@ public class NoticeDao {
 		//8)결과 반환
 		return list;
 	}
+	
+	//공지사항 작성 DAO
+	public int insertNotice(Connection conn, Notice n) {
+		//INSERT문=>int (처리된 행의 갯수)
+		//1) 필요한 변수 셋팅
+		int result=0;
+		PreparedStatement pstmt=null;
+		String sql=prop.getProperty("insertNotice");
+		
+		
+		try {
+			//2)PreparedStatement 객체 생성
+			pstmt=conn.prepareStatement(sql);
+			
+			//3)미완성된 쿼리문 채우기
+			pstmt.setString(1, n.getNoticeTitle());
+			pstmt.setString(2, n.getNoticeContent());
+			pstmt.setInt(3, Integer.parseInt(n.getNoticeWriter()));
+			
+			//4,5)쿼리문 실행 및 결과 받기
+			result=pstmt.executeUpdate();
+			
+			//
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			//6)자원 반납
+			close(pstmt);
+		}
+		//7)결과 반환
+		return result;
+	}
+	
+	//공지사항 조회수 증가용 DAO
+	public int increaseCount(Connection conn, int noticeNo) {
+		int result=0;
+		PreparedStatement pstmt=null;
+		String sql=prop.getProperty("increaseCount");
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, noticeNo);
+			
+			result=pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	//공지사항 상세보기용 DAO
+	public Notice selectNotice(Connection conn, int noticeNo) {
+		Notice n=null;
+		PreparedStatement pstmt=null;
+		ResultSet rset=null;
+		String sql=prop.getProperty("selectNotice");
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, noticeNo);
+			rset=pstmt.executeQuery();
+			if(rset.next()) {
+				n=new Notice(rset.getInt("NOTICE_NO"),rset.getString("NOTICE_TITLE"),rset.getString("NOTICE_CONTENT"),rset.getString("USER_ID"),rset.getDate("CREATE_DATE"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		return n;
+	}
+	
+	//공지사항 수정용 DAO
+	public int updateNotice(Connection conn, Notice n) {
+		int result=0;
+		PreparedStatement pstmt=null;
+		String sql=prop.getProperty("updateNotice");
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			
+			pstmt.setString(1, n.getNoticeTitle());
+			pstmt.setString(2, n.getNoticeContent());
+			pstmt.setInt(3, n.getNoticeNo());
+			
+			result=pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	//공지사항 삭제용 DAO
+	public int deleteNotice(Connection conn, int noticeNo) {
+		int result=0;
+		PreparedStatement pstmt=null;
+		String sql=prop.getProperty("deleteNotice");
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, noticeNo);
+			
+			result=pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
 }

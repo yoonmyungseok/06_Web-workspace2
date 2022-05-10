@@ -40,7 +40,7 @@
         <% if(loginUser!=null&&loginUser.getUserId().equals("admin")){%>
         <div align="right" style="width: 850px;">
             <!--<button type="button" onclick="location.href=''">글작성</button>-->
-            <a href="" class="btn btn-secondary btn-sm">글작성</a>
+            <a href="<%=contextPath%>/enrollForm.no" class="btn btn-secondary btn-sm">글작성</a>
             <!--
                 a 태그는 href 속성이 있지만 버튼은 없으므로 이 경우, 다른페이지로 이동하고자 한다면 
                 클릭 이벤트 발생 시 onclick 이벤트 속성으로 location.href 속성값을 url로 지정하거나, 
@@ -78,31 +78,27 @@
                         </tr>
                     <%} %>
                 <%} %>
-                <!--
-                <tr>
-                    <td>3</td>
-                    <td>제목입니닼ㅋㅋ</td>
-                    <td>admin</td>
-                    <td>120</td>
-                    <td>2021-03-21</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>공지사항임</td>
-                    <td>admin</td>
-                    <td>889</td>
-                    <td>2021-03-01</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>공지사항 서비스를 시작합니다</td>
-                    <td>admin</td>
-                    <td>230</td>
-                    <td>2021-01-21</td>
-                </tr>
-                -->
             </tbody>
         </table>
     </div>
+    <script>
+        $(function(){
+            //각 게시글에 해당되는 tr 태그들 선택 후 클릭이벤트 걸기
+            $(".list-area>tbody>tr").click(function(){
+                //console.log('클림됨');
+                //클릭이 되었을 때 해당 공지사항의 글번호를 뽑아올것임
+                var nno=$(this).children().eq(0).text();
+                //현재 클릭이 된 tr태그의 자손들(td) 중에서 첫 번째 자손의 content 영역의 문구만 필요
+                //console.log(nno);
+
+                // /jsp/detail.no?nno=게시글번호
+                //요청할url?키=밸류&키=밸류...
+                //물음표 뒤의 내용들을 "쿼리스트링" 이라고 한다
+                //=>직접 만들어서 명시적으로 넘기기도 가능(form태그가 없어도 Get방식으로 요청 가능)
+                location.href="<%=contextPath%>/detail.no?nno="+nno;
+            })
+
+        })
+    </script>
 </body>
 </html>
