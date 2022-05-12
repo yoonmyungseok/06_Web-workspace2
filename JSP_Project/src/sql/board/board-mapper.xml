@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<entry key="">
+	<entry key="selectListCount">
+	   SELECT COUNT(*) COUNT FROM BOARD WHERE STATUS='Y' AND BOARD_TYPE=1
+	</entry>
+	<entry key="selectList">
+	   SELECT *
+		FROM(SELECT ROWNUM RNUM, A.*
+		    FROM(SELECT BOARD_NO, CATEGORY_NAME, BOARD_TITLE, USER_ID, COUNT, CREATE_DATE
+		            FROM BOARD B
+		            JOIN CATEGORY USING (CATEGORY_NO)
+		            JOIN MEMBER ON (BOARD_WRITER=USER_NO)
+		            WHERE BOARD_TYPE=1 AND B.STATUS='Y'
+		            ORDER BY CREATE_DATE DESC) A)
+		WHERE RNUM BETWEEN ? AND ? 
+	</entry>
+	<entry key="selectCategoryList">
+	SELECT * FROM CATEGORY
 	</entry>
 </properties>
