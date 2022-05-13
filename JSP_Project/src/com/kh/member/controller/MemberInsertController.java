@@ -61,7 +61,9 @@ public class MemberInsertController extends HttpServlet {
 			//우선적으로 session에 현재 회원가입에 성공한 회원의 정보를 담아둘것
 			//=>메인페이지로 이동시 자동으로 로그인한 효과
 			HttpSession session=request.getSession();
-			session.setAttribute("loginUser", m);
+			
+			//session.setAttribute("loginUser", m);
+			//=>자동로그인 이후 게시글 작성이 안되는 이슈가 있었음
 			
 			//=>성공 알람메시지도 같이 담기
 			session.setAttribute("alertMsg", "회원가입에 성공했습니다");

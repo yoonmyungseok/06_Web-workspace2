@@ -80,6 +80,13 @@
                 <%} %>
             </tbody>
         </table>
+        <script>
+            $(function(){
+                $(".list-area>tbody>tr").click(function(){
+                    location.href="<%=contextPath%>/detail.bo?bno="+$(this).children().eq(0).text();
+                })
+            })
+        </script>
         <br><br>
         <!--페이징바-->
         <div align="center" class="paging-area">

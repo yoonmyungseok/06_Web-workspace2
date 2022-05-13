@@ -34,7 +34,8 @@
         <br>
         <h2 align="center">일반게시판 작성하기</h2>
         <br>
-        <form id="enroll-form" action="" method="post">
+        <!--파일을 서블릿으로 전달하려면 반드시 enctype="multipart/form-data" 속성을 작성해야함-->
+        <form id="enroll-form" action="<%=contextPath %>/insert.bo" method="post" enctype="multipart/form-data">
             <!--
                 카테고리, 제목, 내용, 첨부파일을 입력받고
                 작성자의 회원번호는 hidden으로 넘기기
