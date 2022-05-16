@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.kh.board.model.vo.*" %>
 <%       
-Board b=(Board)request.getAttribute("b"); 
+    Board b=(Board)request.getAttribute("b"); 
     //글번호, 카테고리명, 제목, 내용, 작성자아이디, 작성일
     Attachment at=(Attachment)request.getAttribute("at");
     //파일번호, 원본명, 수정명, 저장경로
@@ -64,12 +64,12 @@ Board b=(Board)request.getAttribute("b");
         </table>
         <br>
         <div align="center">
-            <a href="" class="btn btn-secondary btn-sm">목록가기</a>
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">목록가기</a>
 
             <!--로그인한 사용자가 글 작성자와 일치할 경우만 보여지게끔-->
             <%if(loginUser!=null&&loginUser.getUserId().equals(b.getBoardWriter())){ %>
-            <a href="" class="btn btn-warning btn-sm">수정하기</a>
-            <a href="" class="btn btn-danger btn-sm">삭제하기</a>
+            <a href="<%=contextPath %>/updateForm.bo?bno=<%=b.getBoardNo() %>" class="btn btn-warning btn-sm">수정하기</a>
+            <a href="<%=contextPath%>/delete.bo?bno=<%=b.getBoardNo()%>" class="btn btn-danger btn-sm">삭제하기</a>
             <%} %>
         </div>
         <br>

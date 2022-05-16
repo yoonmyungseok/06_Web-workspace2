@@ -97,4 +97,47 @@ public class BoardService {
 		close(conn);
 		return at;
 	}
+	
+	public int updateBoard(Board b, Attachment at) {
+		Connection conn=getConnection();
+		
+		//우선적으로 공통적으로 실행해야하는 BOARD 테이블 UPDATE 구문
+		int result1=new BoardDao().updateBoard(conn,b);
+		int result2=1;
+		//CASE0. BOARD 테이블만 UPDATE하고 마는 경우를 생각해서 result2는 1로 초기화
+		
+		//새롭게 첨부파일이 있을 경우
+		if(at!=null) {
+			if(at.getFileNo()!=0) {
+				//CASE1. 기존에 첨부파일이 있었는데 새로운 첨부파일이 업로드 된 경우
+				//=>Attachment 테이블 Update
+				result2=new BoardDao().updateAttachment(conn, at);
+			}else {
+				//CASE2. 기존에 첨부파일이 없었는데 새로운 첨부파일이 업로드 된 경우
+				//=>Attachment 테이블 Insert
+				result2=new BoardDao().insertNewAttachment(conn, at);
+			}
+		}
+		//트랜잭션 처리
+		if(result1>0&&result2>0) {
+			//성공
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		return result1*result2;
+	}
+	
+	public int deleteBoard(int boardNo) {
+		Connection conn=getConnection();
+		int result=new BoardDao().deleteBoard(conn,boardNo);
+		if(result>0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		return result;
+	}
 }

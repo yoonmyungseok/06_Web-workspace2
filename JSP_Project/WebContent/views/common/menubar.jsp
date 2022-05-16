@@ -113,18 +113,21 @@
         <div class="menu"><a href="<%=contextPath%>">HOME</a></div>
         <div class="menu"><a href="<%=contextPath%>/list.no">공지사항</a></div>
         <div class="menu"><a href="<%=contextPath%>/list.bo?currentPage=1">일반게시판</a></div>
-        <div class="menu"><a href="">사진게시판</a></div>
+        <div class="menu"><a href="<%=contextPath%>/list.th">사진게시판</a></div>
     </div>
-    <script>
+    
+    <script type="text/javascript">
         //script 태그 내에서도 스크립틀릿과 같은 jsp 요소들을 사용할 수 있다
-        var msg="<%=alertMsg%>"; //"성공적으로 로그인이 되었습니다." / "null"
-        if(msg!="null"){
-            alert(msg);
+        $(function(){
+            var msg = "<%=alertMsg%>"; //"성공적으로 로그인이 되었습니다." / "null"
+            if (msg != "null") {
+                alert(msg);
             //알림창을 띄워 준 후 session에 담긴 해당 메시지를
             //session.removeAttribute("키값"); 메소드로 지워줘야 함
             //안그러면 menubar.jsp가 로딩 될 때 마다 매번 alert가 계속 뜸
             <% session.removeAttribute("alertMsg"); %>
-        }
+            }
+        })
         function enrollPage() {
                 //회원가입 페이지로 이동시키는 역할
                 //location.href="/jsp/views/member/memberEnrollForm.jsp";
@@ -132,8 +135,10 @@
 
                 //단순한 정적인 페이지 요청이라고 해도 반드시 servlet을 거쳐갈것
                 //=>url에 서블릿 맵핑값만 보이게 해줄것임
-                location.href = "<%=contextPath%>/enrollForm.me"
+                location.href = "<%=contextPath%>/enrollForm.me";
             }
+        
     </script>
+    
 </body>
 </html>
