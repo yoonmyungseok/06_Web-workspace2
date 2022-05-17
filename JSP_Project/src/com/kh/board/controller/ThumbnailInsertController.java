@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
+import com.kh.board.model.service.BoardService;
 import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
 import com.kh.common.MyFileRenamePolicy;
@@ -70,11 +71,38 @@ public class ThumbnailInsertController extends HttpServlet {
 			for(int i=1; i<=4; i++) {
 				String key="file"+i;
 				//file1, file2, file3, file4
+				//원본명=>multiRequest.getOriginalFileName(key)
+				//수정명=>mulitRequest.getFilesystemName(key)
 				
-				
+				//첨부파일이 존재할 경우
+				if(multiRequest.getOriginalFileName(key)!=null) {
+					//Attachment 객체 생성
+					//=>원본명, 수정명, 저장경로, 파일레벨 필드 가공
+					Attachment at=new Attachment();
+					at.setOriginName(multiRequest.getOriginalFileName(key));
+					at.setChangeName(multiRequest.getFilesystemName(key));
+					at.setFilePath("resources/thumbnail_upfiles/");
+					
+					if(i==1) {//대표이미지일 경우
+						at.setFileLevel(1);
+					}else {//상세이미지일 경우
+						at.setFileLevel(2);
+					}
+					list.add(at);//첨부파일의 개수만큼 담김
+				}
+			}
+			//이 시점까지 도달했다면 b와 list에 첨부파일 객체가 다 담겨있을 것임
+			int result=new BoardService().insertThumbnailBoard(b, list);
+			if(result>0) {
+				//성공=>list.th 요청
+				request.getSession().setAttribute("alertMsg", "성공적으로 업로드 되었습니다");
+				response.sendRedirect(request.getContextPath()+"/list.th");
+			}else {
+				//실패=>에러페이지로 포워딩
+				request.setAttribute("errorMsg", "사진게시판 업로드 실패");
+				request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 			}
 		}
-		
 	}
 
 	/**

@@ -1,4 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList, com.kh.board.model.vo.Board" %>
+<%
+    ArrayList<Board> list=(ArrayList<Board>)request.getAttribute("list");
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -45,35 +49,29 @@
         </div>
         <%}%>
         <div class="list-area">
+        <%if(list!=null){ %>
+            <%for(Board b:list){ %>
             <div class="thumbnail" align="center">
-                <img src="/jsp/resources/thumbnail_upfiles/" width="200" height="150" alt="">
+                <img src="<%=contextPath %>/<%=b.getTitleImg() %>" width="200" height="150">
+                <input type="hidden" value="<%=b.getBoardNo()%>">
                 <p>
-                    No.123 제목입니다. <br>
-                    조회수: 230
+                    No.<%=b.getBoardNo() %> <%=b.getBoardTitle() %><br>
+                    조회수: <%=b.getCount() %>
                 </p>
             </div>
-            <div class="thumbnail" align="center">
-                <img src="/jsp/resources/thumbnail_upfiles/" width="200" height="150" alt="">
-                <p>
-                    No.123 제목입니다. <br>
-                    조회수: 230
-                </p>
-            </div>
-            <div class="thumbnail" align="center">
-                <img src="/jsp/resources/thumbnail_upfiles/" width="200" height="150" alt="">
-                <p>
-                    No.123 제목입니다. <br>
-                    조회수: 230
-                </p>
-            </div>
-            <div class="thumbnail" align="center">
-                <img src="/jsp/resources/thumbnail_upfiles/" width="200" height="150" alt="">
-                <p>
-                    No.123 제목입니다. <br>
-                    조회수: 230
-                </p>
-            </div>
+            <%} %>
+        <%}else{ %>
+            등록된 게시글이 없습니다.
+        <%} %>
         </div>
     </div>
+    <script>
+        $(function(){
+            $(".thumbnail").click(function(){
+                var bno=$(this).children().eq(0).val();
+                location.href="<%=contextPath%>/detail.th?bno="+bno;
+            })
+        })
+    </script>
 </body>
 </html>

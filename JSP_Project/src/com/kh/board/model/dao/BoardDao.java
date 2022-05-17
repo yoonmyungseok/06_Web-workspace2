@@ -305,4 +305,112 @@ public class BoardDao {
 		}
 		return result;
 	}
+	
+	public int insertThumbnailBoard(Connection conn, Board b) {
+		int result=0;
+		PreparedStatement pstmt=null;
+		String sql=prop.getProperty("insertThumbnailBoard");
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, b.getBoardTitle());
+			pstmt.setString(2, b.getBoardContent());
+			pstmt.setInt(3, Integer.parseInt(b.getBoardWriter()));
+			
+			result=pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public int insertAttachmentList(Connection conn, ArrayList<Attachment> list) {
+		int result=1; 
+		//insert를 반복해서 진행=>하나라도 실패할경우 실패처리
+		//result를 애초에 1로 셋팅해두고 누적 곱을 구할 예정
+		
+		PreparedStatement pstmt=null;
+		String sql=prop.getProperty("insertAttachmentList");
+		
+		try {
+			for(Attachment at:list) {
+				pstmt=conn.prepareStatement(sql);
+				pstmt.setString(1, at.getOriginName());
+				pstmt.setString(2, at.getChangeName());
+				pstmt.setString(3, at.getFilePath());
+				pstmt.setInt(4, at.getFileLevel());
+				
+				result*=pstmt.executeUpdate();
+				//하나라도 실패할 경우 0이 뜰것임
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public ArrayList<Board> selectThumbnailList(Connection conn){
+		ArrayList<Board> list=new ArrayList<>();
+		PreparedStatement pstmt=null;
+		ResultSet rset=null;
+		String sql=prop.getProperty("selectThumbnailList");
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			rset=pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Board b=new Board();
+				b.setBoardNo(rset.getInt("BOARD_NO"));
+				b.setBoardTitle(rset.getString("BOARD_TITLE"));
+				b.setCount(rset.getInt("COUNT"));
+				b.setTitleImg(rset.getString("TITLEIMG"));
+				
+				list.add(b);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		return list;
+	}
+	
+	public ArrayList<Attachment> selectAttachmentList(Connection conn, int boardNo){
+		ArrayList<Attachment> list=new ArrayList<>();
+		PreparedStatement pstmt=null;
+		ResultSet rset=null;
+		
+		//키값이 selectAttachment 쿼리문을 재활용
+		String sql=prop.getProperty("selectAttachment");
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, boardNo);
+			rset=pstmt.executeQuery();
+			while(rset.next()) {
+				Attachment at=new Attachment();
+				at.setFileNo(rset.getInt("FILE_NO"));
+				at.setOriginName(rset.getString("ORIGIN_NAME"));
+				at.setChangeName(rset.getString("CHANGE_NAME"));
+				at.setFilePath(rset.getString("FILE_PATH"));
+				
+				//여기서 우리가 상세조회 시 CHANGE_NAME, FILE_PATH 값만 이용해도 충분
+				//단, FILE_NO, ORIGIN_NAME은 수정 또는 삭제 시 필요하므로 조회
+				
+				list.add(at);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		return list;
+	}
 }

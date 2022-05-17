@@ -140,4 +140,40 @@ public class BoardService {
 		close(conn);
 		return result;
 	}
+	
+	public int insertThumbnailBoard(Board b, ArrayList<Attachment> list) {
+		Connection conn=getConnection();
+		
+		//Board 테이블에 Insert 해주는 메소드
+		int result1=new BoardDao().insertThumbnailBoard(conn, b);
+		
+		//Attachment 테이블에 Insert 해주는 메소드
+		int result2=new BoardDao().insertAttachmentList(conn, list);
+		
+		if(result1>0&&result2>0) {
+			//성공
+			commit(conn);
+		}else {
+			//실패
+			rollback(conn);
+		}
+		close(conn);
+		return result1*result2;
+	}
+	
+	public ArrayList<Board> selectThumbnailList(){
+		Connection conn=getConnection();
+		
+		ArrayList<Board> list=new BoardDao().selectThumbnailList(conn);
+		
+		close(conn);
+		return list;
+	}
+	
+	public ArrayList<Attachment> selectAttachmentList(int boardNo){
+		Connection conn=getConnection();
+		ArrayList<Attachment> list=new BoardDao().selectAttachmentList(conn, boardNo);
+		close(conn);
+		return list;
+	}
 }
