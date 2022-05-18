@@ -13,6 +13,7 @@ import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
 import com.kh.board.model.vo.Category;
 import com.kh.common.model.vo.PageInfo;
+import com.kh.member.model.vo.Reply;
 
 public class BoardService {
 	public int selectListCount() {
@@ -175,5 +176,24 @@ public class BoardService {
 		ArrayList<Attachment> list=new BoardDao().selectAttachmentList(conn, boardNo);
 		close(conn);
 		return list;
+	}
+	
+	public ArrayList<Reply> selectReplyList(int boardNo){
+		Connection conn=getConnection();
+		ArrayList<Reply> list=new BoardDao().selectReplyList(conn, boardNo);
+		close(conn);
+		return list;
+	}
+	
+	public int insertReply(Reply r) {
+		Connection conn=getConnection();
+		int result=new BoardDao().insertReply(conn, r);
+		if(result>0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		return result;
 	}
 }

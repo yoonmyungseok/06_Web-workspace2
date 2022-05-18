@@ -74,15 +74,15 @@
         </div>
         <br>
         <!--댓글창: 우선 화면구현만 하드코딩으로/기능구현은 AJAX 배우고나서-->
-        <div id="replay-area">
+        <div id="reply-area">
             <table align="center" border="1">
                 <thead>
                     <%if(loginUser!=null){ %>
                     <!--로그인이 되어있을 경우-->
                     <tr>
                         <th>댓글작성</th>
-                        <td><textarea cols="50" rows="3" style="resize:none;"></textarea></td>
-                        <td><button>댓글등록</button></td>
+                        <td><textarea id="replyContent" cols="50" rows="3" style="resize:none;"></textarea></td>
+                        <td><button type="button" onclick="insertReply();">댓글등록</button></td>
                     </tr>
                     <%}else{ %>
                     <!--로그인이 되어있지 않은 경우-->
@@ -94,26 +94,78 @@
                     <%} %>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>admin</td>
-                        <td>댓글내용~~</td>
-                        <td>2022년 05월 13일</td>
-                    </tr>
-                    <tr>
-                        <td>admin</td>
-                        <td>댓글내용~~</td>
-                        <td>2022년 05월 13일</td>
-                    </tr>
-                    <tr>
-                        <td>admin</td>
-                        <td>댓글내용~~</td>
-                        <td>2022년 05월 13일</td>
-                    </tr>
+
                 </tbody>
             </table>
             <br><br>
-            
         </div>
+        <script>
+            $(function () {
+                    selectReplyList();
+
+                    //setInterval(selectReplyList, 1000);
+                    // 실시간으로 댓글보기 기능 추가
+                    // 1초 간격마다 selectReplyList 함수 실행
+                });
+
+                function insertReply() {
+
+                    $.ajax({
+                        url: "rinsert.bo",
+                        data: {
+                            content: $("#replyContent").val(),
+                            bno: '<%= b.getBoardNo() %>'
+            			},
+                        type: "post",
+                        success: function (result) {
+
+                            // result 가 1 이라면 성공 / 0 이라면 실패
+                            if (result > 0) { // 댓글작성 성공
+
+                                // 갱신된 댓글 리스트 조회
+                                selectReplyList();
+
+                                // textarea 초기화
+                                $("#replyContent").val("");
+                            }
+                            else { // 댓글작성 실패
+
+                                alert("댓글 등록에 실패했습니다.");
+                            }
+                        },
+                        error: function () {
+                            console.log("댓글 작성용 ajax 통신 실패!");
+                        }
+                    });
+                }
+
+                function selectReplyList() {
+
+                    $.ajax({
+                        url: "rlist.bo",
+                        data: { bno: '<%= b.getBoardNo() %>'},
+                        success: function (result) {
+
+                            // [{}, {}, {}, ...]
+
+                            var resultStr = "";
+                            for (var i = 0; i < result.length; i++) {
+
+                                resultStr += "<tr>"
+                                    + "<td>" + result[i].replyWriter + "</td>"
+                                    + "<td>" + result[i].replyContent + "</td>"
+                                    + "<td>" + result[i].createDate + "</td>"
+                                    + "</tr>";
+                            }
+
+                            $("#reply-area tbody").html(resultStr);
+                        },
+                        error: function () {
+                            console.log("댓글리스트 조회용 ajax 통신 실패!");
+                        }
+                    });
+                }
+        </script>
     </div>
 </body>
 </html>

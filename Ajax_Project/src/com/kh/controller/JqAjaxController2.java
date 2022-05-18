@@ -1,11 +1,15 @@
 package com.kh.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Servlet implementation class JqAjaxController2
@@ -66,7 +70,31 @@ public class JqAjaxController2 extends HttpServlet {
 		 * 2. JSONObject=>자바스크립트의 객체 형태로 넘어가게 됨=>{키:응답데이터, 키:응답데이터, ...}
 		 */
 		
+		//JSON을 이용해서 여러개의 응답데이터 보내기
+		//1.JSONArray를 이용한 방법
+		//JSONArray jArr=new JSONArray(); // []
+		//jArr.add("이름: "+name); // ["이름: 홍길동"]
+		//jArr.add("나이: "+age); // ["이름: 홍길동", "나이: age"]
 		
+		//참고 자바스크립트의 배열==자바의 ArrayList(종류상관없음, 사이즈제한없음, 인덱스개념있음)
+		//ArrayList에 값을 추가할 때 필요한 메소드: list.add(추가할값);
+		
+		//응답할 데이터를 전송시 데이터의 컨텐트타입을 제대로 지정해야
+		//문자열 형식이 아닌 진짜 배열 형식으로 넘어가게 됨
+		//response.setContentType("application/json; charset=utf-8");
+		//response.getWriter().print(jArr);
+		
+		//2. JSONObject를 이용한 방법
+		JSONObject jObj=new JSONObject(); //{}
+		jObj.put("name", name); //{name:"홍길동"}
+		jObj.put("age", age); //{name:"홍길동", age:20}
+		
+		//참고 자바스크립트의 객체==자바의 Map 계열(밸류종류 상관없음, 사이즈제한없음, 인덱스개념없음, 키는중복불가)
+		//Map에 값을 추가할 때 필요한 메소드: hashMap.put("키", 밸류);
+		
+		//데이터 응답(application/json)
+		response.setContentType("application/json; charset=utf-8");
+		response.getWriter().print(jObj);
 	}
 
 	/**

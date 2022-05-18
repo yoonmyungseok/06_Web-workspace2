@@ -1,5 +1,8 @@
 package com.kh.member.model.service;
 
+import static com.kh.common.JDBCTemplate.close;
+import static com.kh.common.JDBCTemplate.getConnection;
+
 import java.sql.Connection;
 
 import com.kh.common.JDBCTemplate;
@@ -123,5 +126,13 @@ public class MemberService {
 		
 		//5)결과 반환
 		return result;
+	}
+	
+	public int idCheck(String checkId) {
+		Connection conn=getConnection();
+		
+		int count=new MemberDao().idCheck(conn,checkId);
+		close(conn);
+		return count;
 	}
 }

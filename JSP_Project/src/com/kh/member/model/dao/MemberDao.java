@@ -1,5 +1,7 @@
 package com.kh.member.model.dao;
 
+import static com.kh.common.JDBCTemplate.close;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -260,5 +262,30 @@ public class MemberDao {
 		}
 		//7)결과 반환
 		return result;
+	}
+	
+	public int idCheck(Connection conn, String checkId) {
+		int count=0;
+		
+		PreparedStatement pstmt=null;
+		ResultSet rset=null;
+		
+		String sql=prop.getProperty("idCheck");
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, checkId);
+			rset=pstmt.executeQuery();
+			
+			if(rset.next()) {
+				count=rset.getInt("COUNT(*)");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		return count;
 	}
 }

@@ -131,8 +131,23 @@
                 success:function(result){
                     //console.log("응답 성공");
                     //console.log(result);
-                    $("#output2").text(result);
-                    $("#output2").css("color","red");
+                    //$("#output2").text(result);
+                    //$("#output2").css("color","red");
+
+                    //여러개의 데이터가 JSONArray에 담겨서 응답된 경우
+                    //console.log(result);
+                    //result==배열==반복문 활용 가능
+                    /*
+                    var responseData="";
+                    for(var i=0; i<result.length; i++){
+                        responseData+=result[i]+"/";
+                    }
+
+                    $("#output2").text(responseData);
+                    */
+                    //여러개의 데이터가 JSONObject에 담겨서 응답된 경우
+                    //console.log(result);
+                    $("#output2").text("이름: "+result.name+", 나이: "+result.age);
 
                     //초기화 된 듯한 효과
                     $("#input2_1").val("");
@@ -145,6 +160,76 @@
                     console.log("성공이던 실패던 한번은 호출됨");
                 }
             });
+        }
+    </script>
+    <hr>
+    <h3>3. 서버로 데이터 전송 후, 조회된 객체를 응답데이터로 받기</h3>
+    회원번호 입력: <input type="number" id="input3">
+    <button onclick="test3();">조회</button>
+    
+    <div id="output3"></div>
+    
+    <script>
+        function test3() {
+            $.ajax({
+                url: "jqAjax3.do",
+                data: { no: $("#input3").val() },
+                success: function (result) {
+                    //console.log(result);
+                    var resultStr="회원번호: "+result.memberNo+"<br>"
+                    +"이름: "+result.memberName+"<br>"
+                    +"나이: "+result.age+"<br>"
+                    +"성별: "+result.gender+"<br>";
+                    $("#output3").html(resultStr);
+                },
+                error: function () {
+                    console.log("응답 실패");
+                }
+            });
+        }
+    </script>
+
+    <hr>
+    <h3>4. 응답데이터로 여러개의 객체들이 담겨있는 ArrayList 받기</h3>
+    <button onclick="test4();">회원 전체조회</button>
+
+    <table id="output4" border="1" style="text-align: center;">
+        <thead>
+            <tr>
+                <th>회원번호</th>
+                <th>회원명</th>
+                <th>나이</th>
+                <th>성별</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <script>
+        function test4(){
+            $.ajax({
+                url:"jqAjax4.do",
+                success:function(result){
+                    //console.log(result);
+                    var str="";
+
+                    for(var i=0; i<result.length; i++){
+                        //console.log(result[i].memberName);
+                        str+="<tr>"
+                            +"<td>"+result[i].memberNo+"</td>"
+                            +"<td>"+result[i].memberName+"</td>"
+                            +"<td>"+result[i].age+"</td>"
+                            +"<td>"+result[i].gender+"</td>"
+                            +"</tr>";
+                    }
+                    $("#output4>tbody").html(str);
+                    },
+                error:function(){
+                    console.log('응답실패');
+                }
+            })
         }
     </script>
 </body>
