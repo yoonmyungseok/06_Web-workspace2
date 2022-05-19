@@ -18,7 +18,26 @@
     String alertMsg=(String)session.getAttribute("alertMsg");
     //System.out.println(alertMsg);
     //로그인 서비스 요청 전 menubar.jsp 로딩 시 null
-    //로그인 서비스 요청 후 성공시 menubar.jsp 로딩 시 alert로 띄워줄 메시지 문
+    //로그인 서비스 요청 후 성공시 menubar.jsp 로딩 시 alert로 띄워줄 메시지 문구
+
+    //쿠키 불러오기: request.getCookies() 메소드=>Cookie 배열로 리턴
+    Cookie[] cookies=request.getCookies();
+    
+    //내가 원하는 쿠키를 골라내는 작업
+    String saveId="";
+    if(cookies!=null){
+        for(int i=0; i<cookies.length; i++){
+    		//System.out.println(cookies[i]+"/"+cookies[i].getName()+"/"+cookies[i].getValue());
+    		//getName():쿠키의 키값
+    		//getValue(): 쿠키의 밸류값
+    	    if(cookies[i].getName().equals("saveId")){
+    	    	saveId=cookies[i].getValue();
+    	    	break;
+    	    }
+    	}
+    	//이 시점에서 "saveId" 라는 키값을 가진 쿠키가 있다면 =>saveId 변수에 아이디가 담겨있을것임
+    }
+
 %>
 <!DOCTYPE html>
 <html>
@@ -82,6 +101,12 @@
                     <th>비밀번호: </th>
                     <td><input type="password" name="userPwd" required></td>
                 </tr>
+                <tr align="right">
+                    <th colspan="2">
+                        <input type="checkbox" id="saveId" name="saveId" value="y">
+                        <label for="saveId">아이디 저장</label>
+                    </th>
+                </tr>
                 <tr>
                     <th colspan="2">
                         <button type="submit">로그인</button>
@@ -103,7 +128,18 @@
         
         <%}%>
     </div>
-    
+    <script>
+        //saveId라는 변수에 저장된 값을 불러와서 아이디 입력창에 설정
+        //아이디 저장하기 체크박스에 체크 수행
+        $(function(){
+            var saveId= '<%=saveId%>'; 
+            if(saveId!=""){
+                //쿠키가 있는 경우
+                $("#login-form input[name=userId]").val(saveId);
+                $("#saveId").attr("checked", true);
+            }
+        })
+    </script>
     <br clear="both">
     <!--메뉴바 영역-->
     <div class="nav-area" align="center">
@@ -122,7 +158,7 @@
             //알림창을 띄워 준 후 session에 담긴 해당 메시지를
             //session.removeAttribute("키값"); 메소드로 지워줘야 함
             //안그러면 menubar.jsp가 로딩 될 때 마다 매번 alert가 계속 뜸
-            <% session.removeAttribute("alertMsg"); %>
+            '<% session.removeAttribute("alertMsg"); %>'
             }
         })
         function enrollPage() {

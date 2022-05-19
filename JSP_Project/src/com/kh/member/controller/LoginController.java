@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,6 +54,38 @@ public class LoginController extends HttpServlet {
 		String userPwd=request.getParameter("userPwd");
 		//System.out.println(userId);
 		//System.out.println(userPwd);
+		
+		//saveId 체크 여부 골라내기
+		String saveId=request.getParameter("saveId"); // "y" / null
+		
+		if(saveId!=null&&saveId.equals("y")) {
+			//아이디를 저장하겠따=>saveId라는 키값으로 넘겨받은 아이디값을 쿠키로 저장
+			
+			//Cookie: 사이트가 사용하고있는 서버에서 사용자의 컴퓨터에 저장하는 정보
+			//			주로 보안과 관련없는 기능을 다룰 때 사용한다
+			/*
+			 * 쿠키 생성
+			 * -쿠키는 객체를 생성한 다음 응답정보에 첨부해야 완전히 생성된다
+			 * -쿠키 생성 시 name, value는 필수(키-밸류 세트로 입력)
+			 * -expires (만료기간)은 옵션
+			 * -name, value는 모두 문자열이여야 한다
+			 * -name이 중복될 시 덮어씌워짐
+			 */
+			Cookie cookie=new Cookie("saveId", userId);
+			cookie.setMaxAge(1*60*60*24); //만료시간 1일 (초단위 작성)
+			response.addCookie(cookie);
+		}else {
+			//아이디를 저장하지 않겠다=>saveId라는 키값을 가진 쿠키를 삭제시키겠다
+			
+			/*
+			 * 쿠키 삭제
+			 * -쿠키 삭제는 따로 명령이 없다
+			 * -0초로 만료시간을 지정하고 똑같은 키값으로 쿠키를 생성해서 덮어씌우면 됨
+			 */
+			Cookie cookie=new Cookie("saveId", userId);
+			cookie.setMaxAge(0);
+			response.addCookie(cookie);
+		}
 
 		//3) 해당 요청을 처리하는 서비스 클래스의 어떤 메소드를 호출
 		Member loginUser=new MemberService().loginMember(userId,userPwd);
