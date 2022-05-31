@@ -118,7 +118,7 @@
             			},
                         type: "post",
                         success: function (result) {
-
+                            console.log(result);
                             // result 가 1 이라면 성공 / 0 이라면 실패
                             if (result > 0) { // 댓글작성 성공
 
@@ -158,6 +158,7 @@
                                     + "</tr>";
                             }
 
+                            
                             $("#reply-area tbody").html(resultStr);
                         },
                         error: function () {
